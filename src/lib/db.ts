@@ -21,6 +21,7 @@ function getCleanDatabaseUrl(): string {
 
 const activeDbUrl = getCleanDatabaseUrl();
 process.env.DATABASE_URL = activeDbUrl;
+process.env.POSTGRES_PRISMA_URL = activeDbUrl;
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
