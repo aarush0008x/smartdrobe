@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://smartdrobe:secretpassword@postgres:5432/smartdrobe?schema=public
+      - JWT_SECRET=smartdrobe_production_jwt_secret_key_2026
+      - AI_PROVIDER=openai
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: smartdrobe_db
+    restart: always
+    environment:
+      POSTGRES_USER: smartdrobe
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: smartdrobe
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

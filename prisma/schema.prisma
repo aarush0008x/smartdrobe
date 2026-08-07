@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id               String         @id @default(uuid())
+  email            String         @unique
+  passwordHash     String
+  name             String
+  role             Role           @default(USER)
+  avatar           String?
+  emailVerified    Boolean        @default(false)
+  subscriptionPlan String         @default("FREE") // "FREE", "PRO", "EXECUTIVE", "PENDING_PRO", "PENDING_EXECUTIVE"
+  paymentUtr       String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  wardrobeItems ClothingItem[]
+  outfits       Outfit[]
+  conversations AIChatConversation[]
+}
+
+model ClothingItem {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  category    String   // Shirts, Pants, Shoes, Jackets, Dresses, Accessories
+  imageUrl    String
+  color       String   // e.g. Black, White, Navy, Beige, Olive
+  season      String   // Spring, Summer, Fall, Winter, All-Season
+  occasion    String   // Casual, Formal, Work, Party, Sport
+  tags        String   // Comma separated tags e.g. "linen, oversized, breathable"
+  isFavorite  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Outfit {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title           String
+  occasion        String
+  season          String
+  weather         String
+  score           Int      @default(95)
+  explanation     String
+  clothingItemIds String   // JSON array string of clothing IDs
+  isFavorite      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AIChatConversation {
+  id        String        @id @default(uuid())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String        @default("Fashion Chat")
+  messages  ChatMessage[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ChatMessage {
+  id             String             @id @default(uuid())
+  conversationId String
+  conversation   AIChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String             // "user" | "assistant"
+  content        String
+  imageUrl       String?
+  createdAt      DateTime           @default(now())
+}
+
+model SystemSettings {
+  id               String   @id @default("default")
+  aiProvider       String   @default("openai") // openai, gemini, claude, custom
+  openaiApiKey     String?
+  geminiApiKey     String?
+  claudeApiKey     String?
+  temperature      Float    @default(0.7)
+  maxTokens        Int      @default(1024)
+  appName          String   @default("SmartDrobe")
+  appDescription  String   @default("AI-Powered Minimalist Wardrobe & Style Platform")
+  maintenanceMode  Boolean  @default(false)
+  primaryColor     String   @default("#2563EB")
+  upiId            String?  @default("smartdrobe@upi")
+  upiAccountHolder String?  @default("SmartDrobe Official")
+  upiQrImageUrl    String?
+  customApiName    String?  @default("Custom LLM API")
+  customApiEndpoint String? @default("http://localhost:11434/v1/chat/completions")
+  customApiKey     String?
+  updatedAt        DateTime @updatedAt
+}
+
+model Plan {
+  id           String   @id @default(uuid())
+  name         String   @unique
+  title        String
+  priceUsd     Float
+  priceInr     Int
+  billingCycle String   @default("monthly")
+  description  String
+  features     String
+  isPopular    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model APILog {
+  id         String   @id @default(uuid())
+  endpoint   String
+  method     String
+  statusCode Int
+  durationMs Int
+  ip         String   @default("127.0.0.1")
+  createdAt  DateTime @default(now())
+}
