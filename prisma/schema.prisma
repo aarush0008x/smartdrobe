@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://neondb_owner:npg_knXTHMi4fY8s@ep-frosty-meadow-zaclk2lc-pooler.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require"
 }
 
 enum Role {
@@ -20,7 +20,7 @@ model User {
   role             Role           @default(USER)
   avatar           String?
   emailVerified    Boolean        @default(false)
-  subscriptionPlan String         @default("FREE") // "FREE", "PRO", "EXECUTIVE", "PENDING_PRO", "PENDING_EXECUTIVE"
+  subscriptionPlan String         @default("FREE")
   paymentUtr       String?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
@@ -35,12 +35,12 @@ model ClothingItem {
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name        String
-  category    String   // Shirts, Pants, Shoes, Jackets, Dresses, Accessories
+  category    String
   imageUrl    String
-  color       String   // e.g. Black, White, Navy, Beige, Olive
-  season      String   // Spring, Summer, Fall, Winter, All-Season
-  occasion    String   // Casual, Formal, Work, Party, Sport
-  tags        String   // Comma separated tags e.g. "linen, oversized, breathable"
+  color       String
+  season      String
+  occasion    String
+  tags        String
   isFavorite  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -56,7 +56,7 @@ model Outfit {
   weather         String
   score           Int      @default(95)
   explanation     String
-  clothingItemIds String   // JSON array string of clothing IDs
+  clothingItemIds String
   isFavorite      Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -76,7 +76,7 @@ model ChatMessage {
   id             String             @id @default(uuid())
   conversationId String
   conversation   AIChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  role           String             // "user" | "assistant"
+  role           String
   content        String
   imageUrl       String?
   createdAt      DateTime           @default(now())
@@ -84,7 +84,7 @@ model ChatMessage {
 
 model SystemSettings {
   id               String   @id @default("default")
-  aiProvider       String   @default("openai") // openai, gemini, claude, custom
+  aiProvider       String   @default("gemini")
   openaiApiKey     String?
   geminiApiKey     String?
   claudeApiKey     String?
