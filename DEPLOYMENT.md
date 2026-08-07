@@ -21,14 +21,20 @@ git push -u origin main
 1. Go to **[vercel.com/new](https://vercel.com/new)** and sign in with your GitHub account.
 2. Click **Import** next to your `smartdrobe` repository.
 
-### Step 3: Add Environment Variables
-In the **Environment Variables** section on Vercel, add:
+### Step 3: Add Free Vercel Postgres Live Database (1-Click)
+1. On your Vercel Project dashboard (`smartdrobe-rho`), click the **Storage** tab.
+2. Click **Create Database** ➔ select **Postgres** (or **Neon**) ➔ click **Create**.
+3. Vercel will automatically connect the database and populate your `DATABASE_URL` environment variable!
+
+### Step 4: Add Environment Variables
+In **Project Settings ➔ Environment Variables** on Vercel, ensure you have:
+- `DATABASE_URL`: Automatically populated by Vercel Postgres
 - `GEMINI_API_KEY`: `your_gemini_api_key_here`
 - `JWT_SECRET`: `smartdrobe-secret-jwt-key-2026-super-secure`
 
-### Step 4: Click Deploy!
-- Click **Deploy**. Vercel will build your project in ~60 seconds.
-- Your application will be live at: **`https://smartdrobe.vercel.app`** with a free SSL certificate!
+### Step 5: Click Deploy!
+- Click **Deploy**. Vercel will build your project, push the Prisma schema to your live Postgres database, and seed the default admin account!
+- Your application will be live at: **`https://smartdrobe-rho.vercel.app`** with full database connectivity!
 
 ---
 
