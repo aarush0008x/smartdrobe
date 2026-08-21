@@ -1,5 +1,5 @@
 # SmartDrobe | AI-Powered Minimalist Wardrobe Platform
-
+In Collab With [Renuka](https://github.com/Renuka-wq) <br>
 SmartDrobe is an AI-powered wardrobe management platform designed to help users digitize their clothes, curate capsule wardrobes, generate intelligent outfit recommendations based on weather and occasion, and consult an AI fashion assistant.
 
 Built with Next.js 15 App Router, React 19, TypeScript, TailwindCSS, Prisma ORM, and Framer Motion. The UI follows an Apple, Notion, Linear, and Vercel minimalist aesthetic using pure White (`#FFFFFF`), crisp Black (`#111111`), and vibrant Blue (`#2563EB`) accents.
